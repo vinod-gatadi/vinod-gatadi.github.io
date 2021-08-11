@@ -15,11 +15,21 @@
 
     <script type="text/babel">
 		
-      
 		function Button(props){
+			
+			function handleClick(){
+				props.onClickFunction(props.increment);
+			}	
+			// OR
+			//const handleClick = () => {props.onClickFunction(props.increment)}
+      
 			return (
-				<button onClick={props.onClickFunction}>
-					{props.name}
+			    // We have to use function reference or inline function
+			    //<button onClick={()=>props.onClickFunction(props.increment)}>
+				//	+{props.increment}   OR
+					
+				<button onClick={handleClick}>
+					+{props.increment}
 				</button>
 			);			
 		}
@@ -35,14 +45,17 @@
 		// class App extends React.Component {
 	    function App(){		
 		  const [counter, setCounter] = React.useState(0);
-		  const incrementCounter = () => setCounter(counter+1);
+		  const incrementCounter = (value) => setCounter(counter+value);
 		  
 		  //render() {
 			
 			return (
 				<div>
 				<h1>Hello World!</h1>
-				<Button name='add' onClickFunction={incrementCounter} />
+				<Button increment={1} onClickFunction={incrementCounter} />
+				<Button increment={5} onClickFunction={incrementCounter} />
+				<Button increment={10} onClickFunction={incrementCounter} />
+				<Button increment={100} onClickFunction={incrementCounter} />
 				<Display message={counter} />
 				</div>
 			  );
