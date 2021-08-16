@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Functional Components</title>
+
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+
+  <body>
+	<h1> Functional Components </h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+		
+		function Button(props){
+			
+			function handleClick(){
+				props.onClickFunction(props.increment);
+			}	
+			// OR
+			//const handleClick = () => {props.onClickFunction(props.increment)}
+      
+			return (
+			    // We have to use function reference or inline function
+			    //<button onClick={()=>props.onClickFunction(props.increment)}>
+				//	+{props.increment}   OR
+					
+				<button onClick={handleClick}>
+					+{props.increment}
+				</button>
+			);			
+		}
+		
+		function Display(props){
+			return (
+				<div>{props.message}</div>
+			);
+		}
+		
+		
+	    function App(){		
+		  const [counter, setCounter] = React.useState(0);
+		  const incrementCounter = (value) => setCounter(counter+value);
+			
+			return (
+				<div>
+					<Button increment={1} onClickFunction={incrementCounter} />
+					<Button increment={5} onClickFunction={incrementCounter} />
+					<Button increment={10} onClickFunction={incrementCounter} />
+					<Button increment={100} onClickFunction={incrementCounter} />
+					<Display message={counter} />
+				</div>
+			  );
+		}
+		
+		ReactDOM.render(<App />, document.getElementById('root'));
+		
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Class components</title>
+    <link rel="stylesheet" href="common.css">
+
+    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+  </head>
+
+  <body>
+	<h1> Class Components </h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+		// Github user names: bvaughn, gaearon, sophiebits
+		
+		const testData = [
+			{name: "Dan Abramov", avatar_url: "https://avatars0.githubusercontent.com/u/810438?v=4", company: "@facebook"},
+			{name: "Sophie Alpert", avatar_url: "https://avatars2.githubusercontent.com/u/6820?v=4", company: "Humu"},
+			{name: "Sebastian Markbåge", avatar_url: "https://avatars2.githubusercontent.com/u/63648?v=4", company: "Facebook"},
+		];
+
+		const CardList = (props)=> (
+			<div>
+				{ props.profiles.map(eachCard => <Card {...eachCard}/>) }
+			</div>
+			// This returns : [ <Card /> <Card /> <Card /> ]
+			// This gets converted to [ React.createElement(), React.createElement(), React.createElement() ]
+			// https://babeljs.io/repl/
+		);
+		
+		class Card extends React.Component{
+			render(){
+				return (
+					<div className="github-profile">
+						<img style={{width: '75px'}} src={this.props.avatar_url} />
+						<div style={{display:'inline-block', marginLeft: 10}}>
+						  <div className="name" >{this.props.name}</div>
+						  <div className="company">{this.props.company}</div>
+						</div>
+					</div>
+				);
+			}
+		}
+				
+		class Form extends React.Component {
+			
+			//userNameInput = React.createRef();
+			state = { userName: '' };
+			
+			handleSubmit = async (event) => {
+				event.preventDefault();  // Important. Other wise page gets refreshed.
+				// console.log(this.userNameInput.current.value);
+				console.log(this.state.userName);
+				const resp = await axios.get(`https://api.github.com/users/${this.state.userName}`);
+				
+				//this.props.onSubmit(this.state.userName)
+				this.props.onSubmit(resp.data);
+				this.setState({userName:''});  // Reset the field after submit
+			};
+		
+			render() {
+				
+				return (
+					<form onSubmit = {this.handleSubmit} action="">
+						
+						<input type="text" placeholder="UserName"  
+							value={this.state.userName} 
+							onChange = { event => this.setState({userName: event.target.value }) }/>
+						<button>Add Card</button>
+					</form>
+				);
+			}
+		}
+		
+		// React code will go here
+		class App extends React.Component {
+			
+			constructor(props){
+				super(props);
+				this.state = { profiles: testData };
+			}
+			
+			addNewProfile = (profileData) =>{
+				console.log(profileData);
+				//this.setState(prevState => ({
+			//		profiles: [ ...prevState.profiles, { name: profileData, company: profileData, avatar_url: "https://avatars0.githubusercontent.com/u/810438?v=4" } ]
+			//	}));
+				
+				this.setState(prevState => ({
+					profiles: [ ...prevState.profiles, profileData ]
+				}));
+			};
+			
+			// OR
+			// state = { profiles: testData };
+			
+	    	render() {
+				return (
+					<div>
+						<div className="header">{this.props.title}</div>
+						<Form onSubmit = {this.addNewProfile} />
+						<CardList profiles={this.state.profiles}/>
+					</div>
+				);
+			}	
+		}
+		
+		ReactDOM.render(<App title="The GitHub Cards App" />, document.getElementById('root'));
+		
+    </script>
+  </body>
+</html>

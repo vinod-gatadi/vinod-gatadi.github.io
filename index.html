@@ -2,68 +2,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-
-    <title>Hello React!</title>
-
-    <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+	<title>Hello React!</title>
+	
   </head>
 
   <body>
-    <div id="root"></div>
+    <ul>
+		<li><a href="class_components.html"> Class Components </a></li>
+		<li><a href="functional_components.html"> Functional Components </a></li>
+    </ul>
 
-    <script type="text/babel">
-		
-		function Button(props){
-			
-			function handleClick(){
-				props.onClickFunction(props.increment);
-			}	
-			// OR
-			//const handleClick = () => {props.onClickFunction(props.increment)}
-      
-			return (
-			    // We have to use function reference or inline function
-			    //<button onClick={()=>props.onClickFunction(props.increment)}>
-				//	+{props.increment}   OR
-					
-				<button onClick={handleClick}>
-					+{props.increment}
-				</button>
-			);			
-		}
-		
-		function Display(props){
-			return (
-				<div>{props.message}</div>
-			);
-		}
-		
-				
-		// React code will go here
-		// class App extends React.Component {
-	    function App(){		
-		  const [counter, setCounter] = React.useState(0);
-		  const incrementCounter = (value) => setCounter(counter+value);
-		  
-		  //render() {
-			
-			return (
-				<div>
-				<h1>Hello World!</h1>
-				<Button increment={1} onClickFunction={incrementCounter} />
-				<Button increment={5} onClickFunction={incrementCounter} />
-				<Button increment={10} onClickFunction={incrementCounter} />
-				<Button increment={100} onClickFunction={incrementCounter} />
-				<Display message={counter} />
-				</div>
-			  );
-		  //}
-		}
-		
-		ReactDOM.render(<App />, document.getElementById('root'));
-		
-    </script>
   </body>
 </html>
