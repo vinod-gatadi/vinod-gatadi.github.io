@@ -82,8 +82,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-		// STAR MATCH - V7
-
+		
 		const StarsDisplay = props => (
 		  <span>
 			{utils.range(1, props.count).map(starId => (
@@ -114,34 +113,25 @@
 			</div>
 		);
 
-		const StarMatch = () => {
+		const Game = (props) => {
 		  const [stars, setStars] = React.useState(utils.random(1, 9));
 		  const [availableNums, setAvailableNums] = React.useState(utils.range(1, 9));
 		  const [candidateNums, setCandidateNums] = React.useState([]);
-		  
 		  const [secondsLeft, setSecondsLeft] = React.useState(10);
 
-			React.useEffect(() => {
+		  React.useEffect(() => {
 			if (secondsLeft > 0 && availableNums.length > 0) {
 			  const timerId = setTimeout(() => {
 				  setSecondsLeft(secondsLeft - 1);
 			  }, 1000);
 				return () => clearTimeout(timerId);
 			}
-		  });  
+		  });
 
 		  const candidatesAreWrong = utils.sum(candidateNums) > stars;
-		  
 		  const gameStatus = availableNums.length === 0 
 			? 'won'
-			: secondsLeft === 0 ? 'lost' : 'active'  
-		  
-		  const resetGame = () => {
-			setStars(utils.random(1, 9));
-			setAvailableNums(utils.range(1, 9));
-			setCandidateNums([]);
-			setSecondsLeft(10);
-		  };
+			: secondsLeft === 0 ? 'lost' : 'active'
 
 		  const numberStatus = number => {
 			if (!availableNums.includes(number)) {
@@ -158,7 +148,7 @@
 			  return;
 			}
 
-				const newCandidateNums =
+		  const newCandidateNums =
 			  currentStatus === 'available'
 				? candidateNums.concat(number)
 				: candidateNums.filter(cn => cn !== number);
@@ -183,7 +173,7 @@
 			  <div className="body">
 				<div className="left">
 				  {gameStatus !== 'active' ? (
-					<PlayAgain onClick={resetGame} gameStatus={gameStatus} />
+					<PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} />
 				  ) : (
 					<StarsDisplay count={stars} />
 				  )}
@@ -203,6 +193,11 @@
 			</div>
 		  );
 		};
+
+		const StarMatch = () => {
+			const [gameId, setGameId] = React.useState(1);
+			return <Game key={gameId} startNewGame={() => setGameId(gameId + 1)}/>;
+		}
 
 		// Color Theme
 		const colors = {
@@ -243,9 +238,8 @@
 		};
 
 		ReactDOM.render(<StarMatch />, document.getElementById('root'));
-						
+
+				
     </script>
-    
   </body>
-  
 </html>
